@@ -116,6 +116,7 @@ CUDT::CUDT()
    m_iRcvTimeOut = -1;
    m_bReuseAddr = true;
    m_llMaxBW = -1;
+   m_userData = NULL;
 
    m_pCCFactory = new CCCFactory<CUDTCC>;
    m_pCC = NULL;
@@ -345,6 +346,10 @@ void CUDT::setOpt(UDTOpt optName, const void* optval, int)
    case UDT_MAXBW:
       m_llMaxBW = *(int64_t*)optval;
       break;
+
+   case UDT_USERDATA:
+      m_userData = (void*)optval;
+      break;
     
    default:
       throw CUDTException(5, 0, 0);
@@ -474,6 +479,11 @@ void CUDT::getOpt(UDTOpt optName, void* optval, int& optlen)
       else
          *(int32_t*)optval = 0;
       optlen = sizeof(int32_t);
+      break;
+   
+   case UDT_USERDATA:
+      optval = m_userData;
+      optlen = sizeof(m_userData);
       break;
 
    default:
